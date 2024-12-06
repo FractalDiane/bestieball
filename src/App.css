@@ -1,0 +1,68 @@
+@font-face {
+	font-family: Go Banana;
+	src: url(assets/GoBanana.ttf);
+}
+
+@font-face {
+	font-family: Sports Jersey;
+	src: url(assets/sportsjersey.ttf);
+}
+
+h1 {
+	font-family: Sports Jersey;
+	font-size: 96pt;
+	line-height: 5px;
+}
+
+.beastieNumber {
+	font-family: Sports Jersey;
+	font-size: 32pt;
+}
+
+.beastieNumber .hash {
+	font-family: sans-serif;
+	font-weight: 800;
+	font-size: .8em;
+}
+
+.beastieName {
+	font-family: Go Banana;
+	font-size: 32pt;
+}
+
+#mainApp {
+	display: flex;
+	flex-direction: row;
+}
+
+.optionLeft {
+	background-color: red;
+	border: 4px solid darkred;
+	border-radius: 10%;
+
+	flex-grow: 1;
+}
+
+.optionLeft:hover {
+	background-color: rgb(255, 137, 137);
+	border: 4px solid darkred;
+	border-radius: 10%;
+}
+
+.optionRight {
+	background-color: deepskyblue;
+	border: 4px solid darkcyan;
+	border-radius: 10%;
+
+	flex-grow: 1;
+}
+
+.optionRight:hover {
+	background-color: rgb(125, 223, 255);
+	border: 4px solid darkcyan;
+	border-radius: 10%;
+}
+
+.spacer {
+	flex-grow: 1;
+}
