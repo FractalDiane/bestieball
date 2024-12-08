@@ -4,6 +4,8 @@ import BeastieOption from './BeastieOption'
 import beastiesFile from './beasties.json'
 import { PairwiseEntry, PairwiseState } from './pairwise';
 import { Beastie, shuffleArray } from './types';
+import { BeastieRankingProps } from './BeastieRanking';
+import BeastieRankingList from './BeastieRankingList';
 
 interface State {
 	selectIndex: number;
@@ -22,6 +24,7 @@ function App() {
 	});
 
 	const [finished, setFinished] = useState(false);
+	const [finalRankings, setFinalRankings] = useState<BeastieRankingProps[]>([]);
 	const [totalComparisons, setTotalComparisons] = useState(0);
 
 	useEffect(() => {
@@ -95,9 +98,16 @@ function App() {
 
 		if (!startNextRound(statePairwise, stateEval)) {
 			stateEval.beastiesChoice = [new PairwiseEntry({beastieName: "", beastieNumber: 0}, 0), new PairwiseEntry({beastieName: "", beastieNumber: 0}, 0)];
+
+			setFinalRankings(
+				statePairwise.allItems
+				.sort((a: PairwiseEntry, b: PairwiseEntry) => b.score - a.score)
+				.map<BeastieRankingProps>((value: PairwiseEntry, index: number) => {return {beastie: value.item, rank: index + 1}; })
+			);
+
 			setEvalState(stateEval);
 			setPairwiseState(statePairwise);
-			console.log("FINISHED");
+			setFinished(true);
 		}
 	}
 
@@ -112,18 +122,30 @@ function App() {
 	const progressMax = 138;
 	const progress = Math.min(Math.floor(totalComparisons / progressMax * 100), 100);
 
-	return (
-		<div id="mainApp">
-		Comparisons: {totalComparisons}
-		<div className="spacer" />
-		<BeastieOption beastie={evalState.beastiesChoice[0].item} onRight={false} onClickCallback={() => onClickOption(false)} />
-		<div className="spacer">
-		{progress < 100 ? `${progress}%` : "Almost"} complete <progress value={totalComparisons} max={progressMax} />
-		</div>
-		<BeastieOption beastie={evalState.beastiesChoice[1].item} onRight={true} onClickCallback={() => onClickOption(true)} />
-		<div className="spacer" />
-		</div>
-	);
+	return (<div id="parent">
+		{!finished ? <>
+			<div id="mainAppChoice">
+				<div className="spacer" />
+				<BeastieOption beastie={evalState.beastiesChoice[0].item} onRight={false} onClickCallback={() => onClickOption(false)} />
+				<div className="spacer" />
+				<BeastieOption beastie={evalState.beastiesChoice[1].item} onRight={true} onClickCallback={() => onClickOption(true)} />
+				<div className="spacer" />
+				</div>
+				<div className="spacer" />
+				<div id="bottomStats">
+				<center><progress value={totalComparisons} max={progressMax} /></center>
+				<center>{progress < 100 ? `${progress}` : "Almost"}<span className="percent">{progress < 100 ? "%" : ""}</span> complete</center>
+			</div>
+		</> :<>
+			<div id="mainAppFinished">
+				<div className="spacer" />
+				<BeastieRankingList rankings={finalRankings} />
+				<div className="spacer" />
+			</div>
+		</>
+		}
+		
+	</div>);
 }
 
 export default App;
