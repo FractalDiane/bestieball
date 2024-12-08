@@ -1,4 +1,4 @@
-import { Beastie } from "./types";
+import { Beastie, shuffleArray } from "./types";
 
 export class PairwiseEntry {
 	item: Beastie;
@@ -66,6 +66,15 @@ export class PairwiseState {
 		}
 
 		return undefined;
+	}
+
+	clearValuesCompared() {
+		this.allItems.forEach((value: PairwiseEntry) => { value.comparedThisRound = false; });
+	}
+
+	shuffleItems() {
+		shuffleArray(this.allItems);
+		this.allItems.forEach((item: PairwiseEntry, index: number) => { item.index = index; });
 	}
 
 	anyTies(): boolean {
