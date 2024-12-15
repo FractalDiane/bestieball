@@ -20,7 +20,7 @@ h1 {
 }
 
 .beastieNumber.ranking {
-	float: right;
+	font-size: 36pt;
 }
 
 .beastieNumber .hash, .percent {
@@ -35,7 +35,7 @@ h1 {
 }
 
 .beastieName.ranking {
-	float: right;
+	font-size: 36pt;
 }
 
 #parent {
@@ -119,7 +119,9 @@ img.beastieIcon.ranking {
 	max-width: 200px;
 	max-height: 200px;
 
-	float: right;
+	display: flex;
+	justify-content: center;
+	align-items: center;
 }
 
 .beastieRankingList {
@@ -135,13 +137,36 @@ img.beastieIcon.ranking {
 	width: auto;
 	height: 250px;
 
+	display: flex;
+	flex-direction: row;
+
 	flex-grow: 1;
 }
 
 .beastieRankingNumber {
 	font-family: Sports Jersey;
-	font-size: 32pt;
-	float: left;
+	font-size: 72pt;
+
+	display: flex;
+	justify-content: center;
+	align-items: center;
+
+	flex-grow: 0.2;
+}
+
+.beastieRankingIcon {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+}
+
+.beastieRankingName {
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+
+	flex-grow: 0.6;
 }
 
 .spacer {
