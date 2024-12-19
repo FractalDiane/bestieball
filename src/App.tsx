@@ -130,9 +130,9 @@ function App() {
 				<div className="spacer" />
 				<BeastieOption beastie={evalState.beastiesChoice[1].item} onRight={true} onClickCallback={() => onClickOption(true)} />
 				<div className="spacer" />
-				</div>
-				<div className="spacer" />
-				<div id="bottomStats">
+			</div>
+			<div className="spacer" />
+			<div id="bottomStats">
 				<center><progress value={totalComparisons} max={progressMax} /></center>
 				<center>{progress < 100 ? `${progress}` : "Almost"}<span className="percent">{progress < 100 ? "%" : ""}</span> complete</center>
 			</div>
