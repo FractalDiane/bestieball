@@ -1,4 +1,5 @@
 import BeastieRanking, { BeastieRankingProps } from "./BeastieRanking";
+import Disclaimer from "./Disclaimer";
 
 export interface BeastieRankingListProps {
 	rankings: BeastieRankingProps[];
@@ -13,6 +14,7 @@ export default function BeastieRankingList(props: BeastieRankingListProps) {
 	return (<>
 		<div className="beastieRankingList">
 			{entries}
+			<Disclaimer />
 		</div>
 	</>);
 }

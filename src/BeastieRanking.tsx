@@ -1,3 +1,4 @@
+import BeastieIcon from "./BeastieIcon";
 import { Beastie } from "./types";
 
 export interface BeastieRankingProps {
@@ -10,7 +11,7 @@ export default function BeastieRanking(props: BeastieRankingProps) {
 		<div className="beastieRanking">
 			<div className="beastieRankingNumber">{props.rank}</div>
 			<div className="beastieRankingIcon">
-				<img className="beastieIcon ranking" src={`https://beastiepediaimg.s3.amazonaws.com/d76cpgnhqk1hcr/${props.beastie.beastieName}Idle.png`} />
+				<BeastieIcon ranking={true} beastie={props.beastie} />
 			</div>
 			<div className="beastieRankingName">
 				<div className="beastieName ranking">{props.beastie.beastieName}</div>

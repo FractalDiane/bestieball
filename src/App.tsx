@@ -6,6 +6,7 @@ import { PairwiseEntry, PairwiseState } from './pairwise';
 import { Beastie, shuffleArray } from './types';
 import { BeastieRankingProps } from './BeastieRanking';
 import BeastieRankingList from './BeastieRankingList';
+import Disclaimer from './Disclaimer';
 
 const AVERAGE_CHOICES: [number, number][] = [
 	[5, 8],
@@ -199,6 +200,7 @@ function App() {
 					<center>Beasties to rank: {beastieRankCount}</center>
 					<center>Estimated choices to make: {estimatedChoices}</center>
 				</div>
+				<Disclaimer />
 			</div>
 		</> :<>
 			<div id="mainAppFinished">
@@ -208,7 +210,6 @@ function App() {
 			</div>
 		</>
 		}
-		
 	</div>);
 }
 
