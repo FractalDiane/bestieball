@@ -3,7 +3,7 @@ import React, { useEffect, useState } from 'react'
 import BeastieOption from './BeastieOption'
 import beastiesFile from './beasties.json'
 import { PairwiseEntry, PairwiseState } from './pairwise';
-import { Beastie, shuffleArray } from './types';
+import { Beastie, BEASTIE_EMPTY, shuffleArray } from './types';
 import { BeastieRankingProps } from './BeastieRanking';
 import BeastieRankingList from './BeastieRankingList';
 import Disclaimer from './Disclaimer';
@@ -48,17 +48,19 @@ interface State {
 	beastiesChoice: [PairwiseEntry, PairwiseEntry];
 }
 
+const STATE_DEFAULT: State = {
+	selectIndex: 0,
+	evaluatingScore: 0,
+	beastiesChoice: [new PairwiseEntry({...BEASTIE_EMPTY}, 0), new PairwiseEntry({...BEASTIE_EMPTY}, 0)],
+};
+
 let initialized = false;
 
 function App() {
 	const [beastieRankCount, setBeastieRankCount] = useState(DEFAULT_COUNT);
 	const [estimatedChoices, setEstimatedChoices] = useState(getEstimatedChoices(DEFAULT_COUNT));
 	const [pairwiseState, setPairwiseState] = useState<PairwiseState>(initializePairwiseState(DEFAULT_COUNT));
-	const [evalState, setEvalState] = useState<State>({
-		selectIndex: 0,
-		evaluatingScore: 0,
-		beastiesChoice: [new PairwiseEntry({beastieName: "", beastieNumber: 0}, 0), new PairwiseEntry({beastieName: "", beastieNumber: 0}, 0)],
-	});
+	const [evalState, setEvalState] = useState<State>({...STATE_DEFAULT});
 
 	const [finished, setFinished] = useState(false);
 	const [finalRankings, setFinalRankings] = useState<BeastieRankingProps[]>([]);
@@ -74,11 +76,7 @@ function App() {
 
 	function reinitialize(beastieCount: number) {
 		const newPairwiseState = initializePairwiseState(beastieCount);
-		const newEvalState: State = {
-			selectIndex: 0,
-			evaluatingScore: 0,
-			beastiesChoice: [new PairwiseEntry({beastieName: "", beastieNumber: 0}, 0), new PairwiseEntry({beastieName: "", beastieNumber: 0}, 0)],
-		};
+		const newEvalState: State = {...STATE_DEFAULT};
 
 		setFinished(false);
 		setFinalRankings([]);
@@ -150,7 +148,7 @@ function App() {
 		}
 
 		if (!startNextRound(statePairwise, stateEval)) {
-			stateEval.beastiesChoice = [new PairwiseEntry({beastieName: "", beastieNumber: 0}, 0), new PairwiseEntry({beastieName: "", beastieNumber: 0}, 0)];
+			stateEval.beastiesChoice = [new PairwiseEntry({...BEASTIE_EMPTY}, 0), new PairwiseEntry({...BEASTIE_EMPTY}, 0)];
 
 			setFinalRankings(
 				statePairwise.allItems
