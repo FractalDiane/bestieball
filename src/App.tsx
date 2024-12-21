@@ -8,6 +8,7 @@ import { BeastieRankingProps } from './BeastieRanking';
 import BeastieRankingList from './BeastieRankingList';
 import Disclaimer from './Disclaimer';
 
+const DEFAULT_COUNT = 25;
 const AVERAGE_CHOICES: [number, number][] = [
 	[5, 8],
 	[10, 24],
@@ -50,9 +51,9 @@ interface State {
 let initialized = false;
 
 function App() {
-	const [beastieRankCount, setBeastieRankCount] = useState(25);
-	const [estimatedChoices, setEstimatedChoices] = useState(getEstimatedChoices(25));
-	const [pairwiseState, setPairwiseState] = useState<PairwiseState>(initializePairwiseState(25));
+	const [beastieRankCount, setBeastieRankCount] = useState(DEFAULT_COUNT);
+	const [estimatedChoices, setEstimatedChoices] = useState(getEstimatedChoices(DEFAULT_COUNT));
+	const [pairwiseState, setPairwiseState] = useState<PairwiseState>(initializePairwiseState(DEFAULT_COUNT));
 	const [evalState, setEvalState] = useState<State>({
 		selectIndex: 0,
 		evaluatingScore: 0,
@@ -196,7 +197,7 @@ function App() {
 				<center><progress value={totalComparisons} max={estimatedChoices} /></center>
 				<div />
 				<div id="rankingCountText">
-					<center><input type="range" name="beastieRankCount" min={5} max={106} defaultValue={25} onChange={onChangeRankingCount} /></center>
+					<center><input type="range" name="beastieRankCount" min={5} max={106} defaultValue={DEFAULT_COUNT} onChange={onChangeRankingCount} /></center>
 					<center>Beasties to rank: {beastieRankCount}</center>
 					<center>Estimated choices to make: {estimatedChoices}</center>
 				</div>
