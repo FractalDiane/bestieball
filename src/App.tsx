@@ -1,11 +1,44 @@
 import './App.css'
-import { useEffect, useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import BeastieOption from './BeastieOption'
 import beastiesFile from './beasties.json'
 import { PairwiseEntry, PairwiseState } from './pairwise';
 import { Beastie, shuffleArray } from './types';
 import { BeastieRankingProps } from './BeastieRanking';
 import BeastieRankingList from './BeastieRankingList';
+
+const AVERAGE_CHOICES: [number, number][] = [
+	[5, 8],
+	[10, 24],
+	[15, 53],
+	[25, 122],
+	[35, 220],
+	[50, 415],
+	[60, 570],
+	[80, 925],
+	[90, 1130],
+	[106, 1470],
+];
+
+function lerp(from: number, to: number, alpha: number): number {
+	return (1 - alpha) * from + alpha * to;
+}
+
+function getEstimatedChoices(rankingCount: number): number {
+	for (let i = 0; i < AVERAGE_CHOICES.length; ++i) {
+		const pair = AVERAGE_CHOICES[i];
+		if (rankingCount == pair[0]) {
+			return pair[1];
+		} else if (rankingCount < pair[0]) {
+			const lastPair = AVERAGE_CHOICES[i - 1];
+			const diff = pair[0] - lastPair[0];
+			const alpha = (rankingCount - lastPair[0]) / diff;
+			return Math.round(lerp(lastPair[1], pair[1], alpha));
+		}
+	}
+
+	return 0;
+}
 
 interface State {
 	selectIndex: number;
@@ -16,7 +49,9 @@ interface State {
 let initialized = false;
 
 function App() {
-	const [pairwiseState, setPairwiseState] = useState<PairwiseState>(initializePairwiseState);
+	const [beastieRankCount, setBeastieRankCount] = useState(25);
+	const [estimatedChoices, setEstimatedChoices] = useState(getEstimatedChoices(25));
+	const [pairwiseState, setPairwiseState] = useState<PairwiseState>(initializePairwiseState(25));
 	const [evalState, setEvalState] = useState<State>({
 		selectIndex: 0,
 		evaluatingScore: 0,
@@ -30,11 +65,27 @@ function App() {
 	useEffect(() => {
 		if (!initialized) {
 			startNextRound();
+			setTotalComparisons(0);
 			initialized = true;
 		}
 	}, []);
 
-	function initializePairwiseState(): PairwiseState {
+	function reinitialize(beastieCount: number) {
+		const newPairwiseState = initializePairwiseState(beastieCount);
+		const newEvalState: State = {
+			selectIndex: 0,
+			evaluatingScore: 0,
+			beastiesChoice: [new PairwiseEntry({beastieName: "", beastieNumber: 0}, 0), new PairwiseEntry({beastieName: "", beastieNumber: 0}, 0)],
+		};
+
+		setFinished(false);
+		setFinalRankings([]);
+
+		startNextRound(newPairwiseState, newEvalState);
+		setTotalComparisons(0);
+	}
+
+	function initializePairwiseState(beastieCount: number): PairwiseState {
 		const newList: Beastie[] = [];
 		beastiesFile.forEach((beastie: string, index: number) => {
 			newList.push({beastieName: beastie, beastieNumber: index + 1});
@@ -42,7 +93,7 @@ function App() {
 
 		shuffleArray(newList);
 		const newListTrimmed: Beastie[] = [];
-		for (let i = 0; i < 25; ++i) {
+		for (let i = 0; i < beastieCount; ++i) {
 			newListTrimmed.push(newList.pop()!);
 		}
 
@@ -119,8 +170,15 @@ function App() {
 		continueComparisons(newState, {...evalState});
 	}
 
-	const progressMax = 138;
-	const progress = Math.min(Math.floor(totalComparisons / progressMax * 100), 100);
+	function onChangeRankingCount(event: React.ChangeEvent<HTMLInputElement>) {
+		const newCount = parseInt(event.target.value);
+		console.log(newCount);
+		setBeastieRankCount(newCount);
+		setEstimatedChoices(getEstimatedChoices(newCount));
+		reinitialize(newCount);
+	}
+
+	const progress = Math.min(Math.floor(totalComparisons / estimatedChoices * 100), 100);
 
 	return (<div id="parent">
 		{!finished ? <>
@@ -133,8 +191,14 @@ function App() {
 			</div>
 			<div className="spacer" />
 			<div id="bottomStats">
-				<center><progress value={totalComparisons} max={progressMax} /></center>
-				<center>{progress < 100 ? `${progress}` : "Almost"}<span className="percent">{progress < 100 ? "%" : ""}</span> complete</center>
+			<center>{progress < 100 ? `${progress}` : "Almost"}<span className="percent">{progress < 100 ? "%" : ""}</span> complete</center>
+				<center><progress value={totalComparisons} max={estimatedChoices} /></center>
+				<div />
+				<div id="rankingCountText">
+					<center><input type="range" name="beastieRankCount" min={5} max={106} defaultValue={25} onChange={onChangeRankingCount} /></center>
+					<center>Beasties to rank: {beastieRankCount}</center>
+					<center>Estimated choices to make: {estimatedChoices}</center>
+				</div>
 			</div>
 		</> :<>
 			<div id="mainAppFinished">

@@ -59,9 +59,14 @@ h1 {
 #bottomStats {
 	font-family: Go Banana;
 	font-size: 32pt;
+	line-height: 70%;
 	
 	flex-grow: 1;
 	width: auto;
+}
+
+#rankingCountText {
+	font-size: 24pt;
 }
 
 @keyframes buttonGlowLeft {
