@@ -183,17 +183,16 @@ function App() {
 	return (<div id="parent">
 		{!finished ? <>
 			<div id="mainAppChoice">
-				<div className="spacer" />
+				<div className="spacer horizontal" />
 				<BeastieOption beastie={evalState.beastiesChoice[0].item} onRight={false} onClickCallback={() => onClickOption(false)} />
-				<div className="spacer" />
+				<div className="spacer horizontal" />
 				<BeastieOption beastie={evalState.beastiesChoice[1].item} onRight={true} onClickCallback={() => onClickOption(true)} />
-				<div className="spacer" />
+				<div className="spacer horizontal" />
 			</div>
 			<div className="spacer" />
 			<div id="bottomStats">
 			<center>{progress < 100 ? `${progress}` : "Almost"}<span className="percent">{progress < 100 ? "%" : ""}</span> complete</center>
 				<center><progress value={totalComparisons} max={estimatedChoices} /></center>
-				<div />
 				<div id="rankingCountText">
 					<center><input type="range" name="beastieRankCount" min={5} max={106} defaultValue={DEFAULT_COUNT} onChange={onChangeRankingCount} /></center>
 					<center>Beasties to rank: {beastieRankCount}</center>
