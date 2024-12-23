@@ -124,6 +124,7 @@ input[type=range]::-moz-range-thumb {
 	border-style: solid;
 	border-radius: 10%;
 
+	padding-top: 10px;
 	padding-bottom: 10px;
 
 	width: min(500px, 40vw);
