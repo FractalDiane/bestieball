@@ -46,6 +46,7 @@ input[type=range]::-moz-range-thumb {
 .beastieNumber {
 	font-family: Sports Jersey;
 	font-size: min(32pt, 4vw);
+	color: black;
 }
 
 .beastieNumber.ranking {
